@@ -1,0 +1,26 @@
+{
+  "name": "file-manager-2024-q3",
+  "version": "1.0.0",
+  "description": "Assignment: File Manager",
+  "main": "main.js",
+  "scripts": {
+    
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pivnenkowebdev/File-Manager-2024-Q3.git"
+  },
+  "keywords": [
+    "node",
+    "npm",
+    "file-manager",
+    "rssschool",
+    "study"
+  ],
+  "author": "Anton Pivnenko",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/pivnenkowebdev/File-Manager-2024-Q3/issues"
+  },
+  "homepage": "https://github.com/pivnenkowebdev/File-Manager-2024-Q3#readme"
+}
