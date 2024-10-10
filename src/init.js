@@ -1,9 +1,16 @@
 import cliInterface from './interface.js';
 import handlerCommand from './handler-command.js';
 
-const formattingUserName = () => {
-    const argUserName = process.argv.find(arg => arg.startsWith('--username='));
-    const formattedUserName = argUserName ? argUserName
+const formattingUserName = async(command) => {
+    let userNameFromCLI;
+
+    if (!command) {
+        userNameFromCLI = await process.argv.find(arg => arg.startsWith('--username='));
+    } else {
+        userNameFromCLI = command;
+    }
+    
+    const formattedUserName = await userNameFromCLI ? userNameFromCLI
         .split('=')[1]
         .replace(/_/g, ' ')
         .trim() : null;
@@ -12,15 +19,22 @@ const formattingUserName = () => {
 }
 
 const greetings = async(formattedName) => {
+    let isAutorizated = false;
     let formattedUserName = await formattedName;
-    let autorizated = false;
 
     if (formattedUserName && formattedUserName.length > 0) {
-        autorizated = true;
+        let isAutorizated = true;
         console.log(`Welcome to the File Manager, ${formattedUserName}!`);
+
+        while (isAutorizated) {
+            const userAnswer = await cliInterface(isAutorizated);
+            handlerCommand(userAnswer);
+        }
+
     } else {
-        formattedUserName = await cliInterface(false);
-        greetings(formattedUserName);
+        formattedUserName = await formattingUserName(await cliInterface(isAutorizated));
+        console.log(formattedUserName);
+        return greetings(formattedUserName);
     }
 }
 
