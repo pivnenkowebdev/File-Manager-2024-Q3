@@ -1,4 +1,5 @@
 import cliInterface from './interface.js';
+import handlerCommand from './handler-command.js';
 
 const formattingUserName = () => {
     const argUserName = process.argv.find(arg => arg.startsWith('--username='));
@@ -11,14 +12,15 @@ const formattingUserName = () => {
 }
 
 const greetings = async(formattedName) => {
-    const formattedUserName = formattedName;
+    let formattedUserName = await formattedName;
+    let autorizated = false;
 
     if (formattedUserName && formattedUserName.length > 0) {
+        autorizated = true;
         console.log(`Welcome to the File Manager, ${formattedUserName}!`);
-        await cliInterface();
     } else {
-        console.log("Invalid input");
-        await cliInterface();
+        formattedUserName = await cliInterface(false);
+        greetings(formattedUserName);
     }
 }
 
