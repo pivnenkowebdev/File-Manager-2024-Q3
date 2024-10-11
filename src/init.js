@@ -1,5 +1,6 @@
 import cliInterface from './interface.js';
 import handlerCommand from './handler-command.js';
+import process from 'node:process';
 
 let isAutorizated = false;
 let currentUserName = '';
@@ -22,8 +23,13 @@ const formattingUserName = async(command) => {
 const proposeDirective = async(status) => {
     while (status) {
         const userAnswer = await cliInterface(status);
-        handlerCommand(userAnswer);
+        await handlerCommand(userAnswer);
     }
+}
+
+const currentWorkDirectory = () => {
+    const currentDir = process.cwd();
+    process.stdout.write(`You are currently in ${currentDir}\n`);
 }
 
 const greetings = async(formattedName) => {
@@ -34,24 +40,27 @@ const greetings = async(formattedName) => {
                 isAutorizated = true;
                 currentUserName = formattedUserName;
 
-                console.log(`Welcome to the File Manager, ${formattedUserName}!`);
+                process.stdout.write(`Welcome to the File Manager, ${formattedUserName}!\n`);
+                currentWorkDirectory();
 
                 proposeDirective(isAutorizated);
             } else {
                 formattedUserName = await formattingUserName(await cliInterface(isAutorizated));
-
+                currentWorkDirectory();
                 return greetings(formattedUserName);
             }
     
         } catch (error) {
             let formattedUserName = await formattingUserName(await cliInterface(isAutorizated));
+            currentWorkDirectory();
             return greetings(formattedUserName);
         }
 }
 
 greetings(await formattingUserName());
 
-export {isAutorizated, currentUserName}
+export {isAutorizated, currentUserName, currentWorkDirectory}
 
-// 1. имя не должно меняться, если пользователь авторизирован
-// 2. команда выхода из программы согласно тз
+
+// техдолг
+// //команда выхода из программы согласно тз -
