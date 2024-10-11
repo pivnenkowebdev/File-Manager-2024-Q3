@@ -11,13 +11,11 @@ const formattingUserName = async(command) => {
     } else {
         userNameFromCLI = command;
     }
-    
-    const formattedUserName = await userNameFromCLI ? userNameFromCLI
-        .split('=')[1]
-        .replace(/_/g, ' ')
-        .trim() : null;
-
-    return formattedUserName;
+        
+    if (userNameFromCLI) {
+        const formattedUserName = userNameFromCLI.split('=')[1]?.replace(/_/g, ' ').trim();
+        return formattedUserName || null;
+    }
 }
 
 const proposeDirective = async(status) => {
@@ -28,9 +26,9 @@ const proposeDirective = async(status) => {
 }
 
 const greetings = async(formattedName) => {
-    let formattedUserName = await formattedName;
-
+    
     try {
+        let formattedUserName = await formattedName;
 
         if (formattedUserName && formattedUserName.length > 0) {
             isAutorizated = true;
@@ -42,9 +40,9 @@ const greetings = async(formattedName) => {
         }
 
     } catch (error) {
-        console.error('Operation failed');
-        proposeDirective(isAutorizated);
+        let formattedUserName = await formattingUserName(await cliInterface(isAutorizated));
+        return greetings(formattedUserName);
     }
 }
 
-greetings(formattingUserName());
+greetings(await formattingUserName());
