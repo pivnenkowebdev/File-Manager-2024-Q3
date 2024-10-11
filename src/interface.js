@@ -3,7 +3,7 @@ import process from 'node:process';
 
 const cliInterface = async (status) => {
 
-    const readableOtputStream = await readline.createInterface({ 
+    const readableOtputStream = readline.createInterface({ 
         input: process.stdin, 
         output: process.stdout 
     });

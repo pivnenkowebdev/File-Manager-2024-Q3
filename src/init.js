@@ -1,11 +1,13 @@
 import cliInterface from './interface.js';
 import handlerCommand from './handler-command.js';
 
+let isAutorizated = false;
+
 const formattingUserName = async(command) => {
     let userNameFromCLI;
 
     if (!command) {
-        userNameFromCLI = await process.argv.find(arg => arg.startsWith('--username='));
+        userNameFromCLI = process.argv.find(arg => arg.startsWith('--username='));
     } else {
         userNameFromCLI = command;
     }
@@ -18,23 +20,30 @@ const formattingUserName = async(command) => {
     return formattedUserName;
 }
 
+const proposeDirective = async(status) => {
+    while (status) {
+        const userAnswer = await cliInterface(status);
+        handlerCommand(userAnswer);
+    }
+}
+
 const greetings = async(formattedName) => {
-    let isAutorizated = false;
     let formattedUserName = await formattedName;
 
-    if (formattedUserName && formattedUserName.length > 0) {
-        let isAutorizated = true;
-        console.log(`Welcome to the File Manager, ${formattedUserName}!`);
+    try {
 
-        while (isAutorizated) {
-            const userAnswer = await cliInterface(isAutorizated);
-            handlerCommand(userAnswer);
+        if (formattedUserName && formattedUserName.length > 0) {
+            isAutorizated = true;
+            console.log(`Welcome to the File Manager, ${formattedUserName}!`);
+            proposeDirective(isAutorizated);
+        } else {
+            formattedUserName = await formattingUserName(await cliInterface(isAutorizated));
+            return greetings(formattedUserName);
         }
 
-    } else {
-        formattedUserName = await formattingUserName(await cliInterface(isAutorizated));
-        console.log(formattedUserName);
-        return greetings(formattedUserName);
+    } catch (error) {
+        console.error('Operation failed');
+        proposeDirective(isAutorizated);
     }
 }
 
