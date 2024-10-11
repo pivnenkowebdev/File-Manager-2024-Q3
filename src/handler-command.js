@@ -1,6 +1,7 @@
+import {isAutorizated, currentUserName} from './init.js';
+
 const handlerCommand = async(commandType) => {
-    // обработка команд
-    console.log(`User say that you are ${commandType}`);
+    
 }
 
 export default handlerCommand;
