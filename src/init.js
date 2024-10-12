@@ -36,10 +36,12 @@ const greetings = async(formattedName) => {
         statusAutorizated = true;
         const message = `\nEnter command: `;
 
+        await currentWorkDirectory();
         await sayHi(formattedName);
         await proposeInput(message);
         
     } else {
+        await currentWorkDirectory();
         const message = '\nInvalid input\nEnter command:\n';
         const userName = await cliInterface(message);
         const formattedName = await formattingUserName(userName);
