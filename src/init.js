@@ -1,66 +1,50 @@
-import cliInterface from './interface.js';
-import handlerCommand from './handler-command.js';
 import process from 'node:process';
+import cliInterface from './interface.js';
 
-let isAutorizated = false;
-let currentUserName = '';
+let statusAutorizated = false;
 
-const formattingUserName = async(command) => {
-    let userNameFromCLI;
+const formattingUserName = async (name) => {
+    const userNameFromCLI = name || process.argv.find(arg => arg.startsWith('--username='));
 
-    if (!command) {
-        userNameFromCLI = process.argv.find(arg => arg.startsWith('--username='));
-    } else {
-        userNameFromCLI = command;
-    }
-        
     if (userNameFromCLI) {
-        const formattedUserName = userNameFromCLI.split('=')[1]?.replace(/_/g, ' ').trim();
-        return formattedUserName || null;
+        const parts = userNameFromCLI.split('=');
+        if (parts[1]) {
+            const formattedName = parts[1].replace(/_/g, ' ').trim();
+            return formattedName;
+        }
     }
-}
+    return null;
+};
 
-const proposeDirective = async(status) => {
-    while (status) {
-        const userAnswer = await cliInterface(status);
-        await handlerCommand(userAnswer);
-    }
-}
-
-const currentWorkDirectory = () => {
+const currentWorkDirectory = async() => {
     const currentDir = process.cwd();
-    process.stdout.write(`You are currently in ${currentDir}\n`);
+    process.stdout.write(`\nYou are currently in ${currentDir}\n`);
+}
+
+const proposeInput = async(message) => {
+    const userAnswer = await cliInterface(message);
+    return userAnswer;
+}
+
+const sayHi = async(formattedName) => {
+    process.stdout.write(`\nWelcome to the File Manager, ${formattedName}!\n`);
 }
 
 const greetings = async(formattedName) => {
-        try {
-            let formattedUserName = await formattedName;
-    
-            if (formattedUserName && formattedUserName.length > 0) {
-                isAutorizated = true;
-                currentUserName = formattedUserName;
 
-                process.stdout.write(`Welcome to the File Manager, ${formattedUserName}!\n`);
-                currentWorkDirectory();
+    if (formattedName) {
+        statusAutorizated = true;
+        const message = `\nEnter command: `;
 
-                proposeDirective(isAutorizated);
-            } else {
-                formattedUserName = await formattingUserName(await cliInterface(isAutorizated));
-                currentWorkDirectory();
-                return greetings(formattedUserName);
-            }
-    
-        } catch (error) {
-            let formattedUserName = await formattingUserName(await cliInterface(isAutorizated));
-            currentWorkDirectory();
-            return greetings(formattedUserName);
-        }
+        await sayHi(formattedName);
+        await proposeInput(message);
+        
+    } else {
+        const message = '\nInvalid input\nEnter command:\n';
+        const userName = await cliInterface(message);
+        const formattedName = await formattingUserName(userName);
+        return greetings(formattedName);
+    }
 }
 
 greetings(await formattingUserName());
-
-export {isAutorizated, currentUserName, currentWorkDirectory}
-
-
-// техдолг
-// //команда выхода из программы согласно тз -

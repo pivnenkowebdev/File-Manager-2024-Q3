@@ -1,4 +1,5 @@
 import {isAutorizated, currentUserName} from './init.js';
+import process from 'node:process';
 
 const handlerCommand = async(commandType) => {
     switch (commandType) {
@@ -8,6 +9,7 @@ const handlerCommand = async(commandType) => {
             break;
     
         default:
+            process.stdout.write(`\nInvalid input\nEnter command: \n`);
             break;
     }
 }
