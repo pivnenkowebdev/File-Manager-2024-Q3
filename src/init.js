@@ -1,5 +1,6 @@
 import process from 'node:process';
 import cliInterface from './interface.js';
+import handlerCommand from './handler-command.js';
 
 let statusAutorizated = false;
 
@@ -21,24 +22,32 @@ const currentWorkDirectory = async() => {
     process.stdout.write(`\nYou are currently in ${currentDir}\n`);
 }
 
-const proposeInput = async(message) => {
-    const userAnswer = await cliInterface(message);
-    return userAnswer;
-}
-
 const sayHi = async(formattedName) => {
     process.stdout.write(`\nWelcome to the File Manager, ${formattedName}!\n`);
+}
+
+const sayBi = async(formattedName) => {
+    process.stdout.write(`Thank you for using File Manager, ${formattedName}, goodbye!\n`);
+}
+
+const proposeInput = async(message, userName) => {
+    const userAnswer = await cliInterface(message, userName);
+    return userAnswer;
 }
 
 const greetings = async(formattedName) => {
 
     if (formattedName) {
         statusAutorizated = true;
-        const message = `\nEnter command: `;
+        const message = `Enter command\n`;
 
         await currentWorkDirectory();
         await sayHi(formattedName);
-        await proposeInput(message);
+        
+        while (statusAutorizated) {
+            const userAnswer = await proposeInput(message, formattedName);
+            await handlerCommand(formattedName, userAnswer);
+        }
         
     } else {
         await currentWorkDirectory();
@@ -50,3 +59,9 @@ const greetings = async(formattedName) => {
 }
 
 greetings(await formattingUserName());
+
+export { currentWorkDirectory, sayBi };
+
+
+// 1. не может использовать другие команды пока не ввёл имя (через статус)
+// 2. обработка остальных команд

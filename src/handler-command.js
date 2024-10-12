@@ -1,15 +1,23 @@
-import {isAutorizated, currentUserName} from './init.js';
+// import {isAutorizated} from './init.js';
 import process from 'node:process';
+import { currentWorkDirectory, sayBi } from './init.js';
+import cliInterface from './interface.js';
 
-const handlerCommand = async(commandType) => {
+const handlerCommand = async(userName = 'Guest', commandType) => {
+
     switch (commandType) {
         case '.exit':
-            console.log(`Thank you for using File Manager, ${currentUserName}, goodbye!`);
+            await currentWorkDirectory();
+            await sayBi(userName);
             process.exit(0);
             break;
-    
+
+        case 'a':
+            await currentWorkDirectory();
+            break;
+
         default:
-            process.stdout.write(`\nInvalid input\nEnter command: \n`);
+            process.stdout.write(`Invalid input: \n`);
             break;
     }
 }
