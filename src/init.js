@@ -63,5 +63,4 @@ greetings(await formattingUserName());
 export { currentWorkDirectory, sayBi };
 
 
-// 1. не может использовать другие команды пока не ввёл имя (через статус)
-// 2. обработка остальных команд
+// 1. обработка остальных команд
