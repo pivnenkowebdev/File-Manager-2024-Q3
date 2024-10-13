@@ -1,16 +1,10 @@
 import process from 'node:process';
-import path from 'node:path';
-import { fileURLToPath } from 'url';
-import { dirname } from 'path';
 
 import { currentWorkDirectory, sayBi } from './init.js';
-import changeDir from './checkout-dir.js';
+import { changeUpDir, changeDir } from './checkout-dir.js';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
-
-const handlerCommand = async(userName = 'Guest', commandType) => {
+const handlerCommand = async (userName = 'Guest', commandInput) => {
+    const [commandType, ...args] = commandInput.split(' ');
 
     switch (commandType) {
         case '.exit':
@@ -20,7 +14,13 @@ const handlerCommand = async(userName = 'Guest', commandType) => {
             break;
 
         case 'up':
-            await changeDir();
+            await changeUpDir();
+            await currentWorkDirectory();
+            break;
+
+        case 'cd':
+            const pathToDirectory = args.join(' ');
+            await changeDir(pathToDirectory);
             await currentWorkDirectory();
             break;
 
@@ -29,5 +29,4 @@ const handlerCommand = async(userName = 'Guest', commandType) => {
             break;
     }
 }
-
 export default handlerCommand; 
