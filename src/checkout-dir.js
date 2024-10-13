@@ -1,7 +1,6 @@
 import { chdir, cwd } from 'node:process';
-import { promises as fs } from 'fs';
+import fs from 'node:fs/promises';
 import path from 'node:path';
-import { fileURLToPath } from 'url';
 
 const changeUpDir = async() => {
     const currentDir = cwd();
@@ -20,10 +19,42 @@ const changeDir = async (pathToDir) => {
     try {
         await fs.access(normalizedPath);
         chdir(normalizedPath);
-        process.stdout.write(`Changed directory to: ${normalizedPath}\n`);
     } catch (error) {
         console.error('Invalid input\n');
     }
 }
 
-export { changeUpDir, changeDir} ;
+const showInfoDir = async() => {
+    const currentDir = cwd();
+
+    try {
+        const files = await fs.readdir(currentDir);
+        
+        const fileStats = await Promise.all(
+            files.map(async (file) => {
+                const filePath = `${currentDir}/${file}`;
+                const stats = await fs.stat(filePath);
+                return {
+                    Name: file,
+                    Type: stats.isDirectory() ? 'directory' : 'file',
+                };
+            })
+        );
+
+        fileStats.sort((a, b) => {
+            if (a.Type === 'directory' && b.Type === 'file') {
+                return -1;
+            }
+            if (a.Type === 'file' && b.Type === 'directory') {
+                return 1;
+            }
+            return a.Name.localeCompare(b.Name);
+        });
+
+        console.table(fileStats);
+    } catch (err) {
+        console.error("Invalide Input");
+    } 
+}
+
+export { changeUpDir, changeDir, showInfoDir} ;

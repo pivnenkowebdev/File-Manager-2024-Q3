@@ -1,7 +1,7 @@
 import process from 'node:process';
 
 import { currentWorkDirectory, sayBi } from './init.js';
-import { changeUpDir, changeDir } from './checkout-dir.js';
+import { changeUpDir, changeDir, showInfoDir } from './checkout-dir.js';
 
 const handlerCommand = async (userName = 'Guest', commandInput) => {
     const [commandType, ...args] = commandInput.split(' ');
@@ -21,6 +21,11 @@ const handlerCommand = async (userName = 'Guest', commandInput) => {
         case 'cd':
             const pathToDirectory = args.join(' ');
             await changeDir(pathToDirectory);
+            await currentWorkDirectory();
+            break;
+
+        case 'ls':
+            await showInfoDir();
             await currentWorkDirectory();
             break;
 
