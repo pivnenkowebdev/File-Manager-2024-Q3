@@ -3,6 +3,7 @@ import process from 'node:process';
 import { currentWorkDirectory, sayBi } from './init.js';
 import { changeUpDir, changeDir, showInfoDir } from './checkout-dir.js';
 import readFileStream from './read-file.js';
+import create from './add.js';
 
 const handlerCommand = async (userName = 'Guest', commandInput) => {
     const [commandType, ...args] = commandInput.split(' ');
@@ -33,6 +34,12 @@ const handlerCommand = async (userName = 'Guest', commandInput) => {
         case 'cat':
             const pathToFile = args.join(' ');
             await readFileStream(pathToFile);
+            await currentWorkDirectory();
+            break;
+
+        case 'add':
+            const pathToNewFile = args.join(' ');
+            await create(pathToNewFile);
             await currentWorkDirectory();
             break;
 
