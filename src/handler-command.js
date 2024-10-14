@@ -11,7 +11,7 @@ import moveFile from './move.js';
 import hashing from './hash.js';
 import compress from './compress.js';
 import decompress from './de-compress.js';
-import { showEndLine } from './os.js';
+import chooceFunc from './os.js';
 
 const handlerCommand = async (userName = 'Guest', commandInput) => {
     const [commandType, ...args] = commandInput.split(' ');
@@ -100,7 +100,7 @@ const handlerCommand = async (userName = 'Guest', commandInput) => {
 
         case 'os':
             const arg = args[0];            
-            await showEndLine(arg);
+            await chooceFunc(arg);
             await currentWorkDirectory();
             break;
 
