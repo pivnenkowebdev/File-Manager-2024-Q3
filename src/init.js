@@ -61,6 +61,3 @@ const greetings = async(formattedName) => {
 greetings(await formattingUserName());
 
 export { currentWorkDirectory, sayBi };
-
-
-// 1. обработка остальных команд
