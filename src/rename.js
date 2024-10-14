@@ -23,7 +23,7 @@ const rename = async (oldFileName, newFileName) => {
         console.log(`File renamed from "${oldFileName}" to "${newNameWithExtension}" successfully.`);
     } catch (error) {
         if (error.code === 'ENOENT') {
-            console.error('Operation failed: File not found.');
+            console.error('Operation failed');
         } else {
             console.error('Operation failed: ', error.message);
         }
