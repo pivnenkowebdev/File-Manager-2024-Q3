@@ -7,6 +7,7 @@ import create from './add.js';
 import rename from './rename.js';
 import copy from './copy.js';
 import remove from './remove.js';
+import moveFile from './move.js';
 
 const handlerCommand = async (userName = 'Guest', commandInput) => {
     const [commandType, ...args] = commandInput.split(' ');
@@ -63,6 +64,13 @@ const handlerCommand = async (userName = 'Guest', commandInput) => {
         case 'rm':
             const pathToDeleteFile = args[0];
             await remove(pathToDeleteFile);
+            await currentWorkDirectory();
+            break;
+
+        case 'mv':
+            const pathToOrigFile = args[0];
+            const pathToMove = args[1];
+            await moveFile(pathToOrigFile, pathToMove);
             await currentWorkDirectory();
             break;
 
