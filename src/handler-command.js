@@ -9,6 +9,7 @@ import copy from './copy.js';
 import remove from './remove.js';
 import moveFile from './move.js';
 import hashing from './hash.js';
+import compress from './compress.js';
 
 const handlerCommand = async (userName = 'Guest', commandInput) => {
     const [commandType, ...args] = commandInput.split(' ');
@@ -78,6 +79,13 @@ const handlerCommand = async (userName = 'Guest', commandInput) => {
         case 'hash':
             const pathToHashingFile = args[0];
             await hashing(pathToHashingFile);
+            await currentWorkDirectory();
+            break;
+
+        case 'compress':
+            const pathToCompressFile = args[0];
+            const pathToNewDir = args[1];
+            await compress(pathToCompressFile, pathToNewDir);
             await currentWorkDirectory();
             break;
 
