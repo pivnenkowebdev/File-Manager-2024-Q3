@@ -11,6 +11,7 @@ import moveFile from './move.js';
 import hashing from './hash.js';
 import compress from './compress.js';
 import decompress from './de-compress.js';
+import { showEndLine } from './os.js';
 
 const handlerCommand = async (userName = 'Guest', commandInput) => {
     const [commandType, ...args] = commandInput.split(' ');
@@ -94,6 +95,12 @@ const handlerCommand = async (userName = 'Guest', commandInput) => {
             const pathToZip = args[0];
             const pathToNewDest = args[1];
             await decompress(pathToZip, pathToNewDest);
+            await currentWorkDirectory();
+            break;
+
+        case 'os':
+            const arg = args[0];            
+            await showEndLine(arg);
             await currentWorkDirectory();
             break;
 
