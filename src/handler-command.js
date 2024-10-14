@@ -4,6 +4,7 @@ import { currentWorkDirectory, sayBi } from './init.js';
 import { changeUpDir, changeDir, showInfoDir } from './checkout-dir.js';
 import readFileStream from './read-file.js';
 import create from './add.js';
+import rename from './rename.js';
 
 const handlerCommand = async (userName = 'Guest', commandInput) => {
     const [commandType, ...args] = commandInput.split(' ');
@@ -40,6 +41,15 @@ const handlerCommand = async (userName = 'Guest', commandInput) => {
         case 'add':
             const pathToNewFile = args.join(' ');
             await create(pathToNewFile);
+            await currentWorkDirectory();
+            break;
+
+        case 'rn':
+            console.log(args);
+            
+            const pathToOldFile = args[0];
+            const newName = args[1];
+            await rename(pathToOldFile, newName);
             await currentWorkDirectory();
             break;
 
