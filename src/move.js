@@ -2,6 +2,11 @@ import fs from 'node:fs';
 import path from 'node:path';
 
 const moveFile = async (pathToFile, pathToNewDirectory) => {
+    if (!pathToFile || !pathToNewDirectory) {
+        console.error('Invalide Input');
+        return;
+    }
+
     const fullPathToFile = path.resolve(pathToFile);
     const fullPathToNewDir = path.resolve(pathToNewDirectory);
     const fileName = path.basename(fullPathToFile);

@@ -2,9 +2,14 @@ import fs from 'node:fs';
 import path from 'node:path';
 
 const copyWithStreams = async (pathToOldFile, pathToNewDirectory) => {
+    if (!pathToOldFile || !pathToNewDirectory) {
+        console.error('Invalide Input');
+        return;
+    }
+    
     const fullPathToOriginFilesDir = path.resolve(pathToOldFile);
     const fullPathToCopyFilesDir = path.resolve(pathToNewDirectory);
-    
+
     try {
         await fs.promises.access(fullPathToOriginFilesDir);
         const originContent = await fs.promises.readdir(fullPathToOriginFilesDir);

@@ -6,7 +6,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 const rename = async (oldFileName, newFileName) => {
-    if (!oldFileName) {
+    if (!oldFileName || !newFileName) {
         console.error('Operation failed');
         return; 
     }
