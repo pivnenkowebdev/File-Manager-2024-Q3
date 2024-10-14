@@ -2,9 +2,7 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 
 const remove = async (pathToDeleteFile) => {
-const pathToFile = path.resolve(pathToDeleteFile);
-    console.log(`Attempting to delete: ${pathToFile}`);
-    
+    const pathToFile = path.resolve(pathToDeleteFile);
     try {
         await fs.access(pathToFile);
         await fs.unlink(pathToFile);
