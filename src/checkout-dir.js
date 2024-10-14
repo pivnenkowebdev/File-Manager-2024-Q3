@@ -29,32 +29,30 @@ const showInfoDir = async() => {
 
     try {
         const files = await fs.readdir(currentDir);
-        
-        const fileStats = await Promise.all(
+
+        const directories = [];
+        const regularFiles = [];
+
+        await Promise.all(
             files.map(async (file) => {
                 const filePath = `${currentDir}/${file}`;
                 const stats = await fs.stat(filePath);
-                return {
-                    Name: file,
-                    Type: stats.isDirectory() ? 'directory' : 'file',
-                };
+
+                if (stats.isDirectory()) {
+                    directories.push({ Name: file, Type: 'directory' });
+                } else {
+                    regularFiles.push({ Name: file, Type: 'file' });
+                }
             })
         );
 
-        fileStats.sort((a, b) => {
-            if (a.Type === 'directory' && b.Type === 'file') {
-                return -1;
-            }
-            if (a.Type === 'file' && b.Type === 'directory') {
-                return 1;
-            }
-            return a.Name.localeCompare(b.Name);
-        });
+        directories.sort((a, b) => a.Name.localeCompare(b.Name));
+        regularFiles.sort((a, b) => a.Name.localeCompare(b.Name));
 
-        console.table(fileStats);
+        console.table([...directories, ...regularFiles]);
     } catch (err) {
-        console.error("Invalide Input");
-    } 
+        console.error("Invalid Input");
+    }
 }
 
 export { changeUpDir, changeDir, showInfoDir} ;
