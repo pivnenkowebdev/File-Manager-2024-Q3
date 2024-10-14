@@ -6,6 +6,7 @@ import readFileStream from './read-file.js';
 import create from './add.js';
 import rename from './rename.js';
 import copy from './copy.js';
+import remove from './remove.js';
 
 const handlerCommand = async (userName = 'Guest', commandInput) => {
     const [commandType, ...args] = commandInput.split(' ');
@@ -56,6 +57,12 @@ const handlerCommand = async (userName = 'Guest', commandInput) => {
             const pathToCopyFile = args[0];
             const  newPath = args[1];
             await copy(pathToCopyFile, newPath);
+            await currentWorkDirectory();
+            break;
+
+        case 'rm':
+            const pathToDeleteFile = args[0];
+            await remove(pathToDeleteFile);
             await currentWorkDirectory();
             break;
 
